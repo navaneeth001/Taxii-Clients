@@ -1,0 +1,62 @@
+{
+    "response": {
+        "objects": [
+            {
+                "id": "indicator--6e2838ae-dc5f-46fb-9424-69c478dcedb2",
+                "name": "https://79.133.51.114/login",
+                "type": "indicator",
+                "labels": [
+                    "UAdmin"
+                ],
+                "created": "2024-01-07T13:47:28.875Z",
+                "pattern": "[url:value = 'https://79.133.51.114/login']",
+                "revoked": false,
+                "modified": "2024-01-07T13:47:28.875Z",
+                "confidence": 100,
+                "extensions": {
+                    "extension-definition--5c4546f1-7e76-4b4a-844c-64a1f722c788": {
+                        "extension_type": "toplevel-property-extension"
+                    }
+                },
+                "valid_from": "2024-01-07T13:47:28.875Z",
+                "description": "\nThreat Type: botnet_cc\nThreat Type Description: Indicator that identifies a botnet command&control server (C&C)\nIOC Type Description: URL that is used for botnet Command&control (C&C)\n",
+                "pattern_type": "stix",
+                "spec_version": "2.1",
+                "indicator_types": [
+                    "unknown"
+                ],
+                "x_ctix_confidence_score": 100
+            },
+            {
+                "id": "indicator--c1bc2311-4715-4caf-8dc0-382161f75375",
+                "name": "http://188.116.22.246/dashboard",
+                "type": "indicator",
+                "labels": [
+                    "UAdmin"
+                ],
+                "created": "2024-01-07T13:47:28.899Z",
+                "pattern": "[url:value = 'http://188.116.22.246/dashboard']",
+                "revoked": false,
+                "modified": "2024-01-07T13:47:28.899Z",
+                "confidence": 100,
+                "extensions": {
+                    "extension-definition--5c4546f1-7e76-4b4a-844c-64a1f722c788": {
+                        "extension_type": "toplevel-property-extension"
+                    }
+                },
+                "valid_from": "2024-01-07T13:47:28.899Z",
+                "description": "\nThreat Type: botnet_cc\nThreat Type Description: Indicator that identifies a botnet command&control server (C&C)\nIOC Type Description: URL that is used for botnet Command&control (C&C)\n",
+                "pattern_type": "stix",
+                "spec_version": "2.1",
+                "indicator_types": [
+                    "unknown"
+                ],
+                "x_ctix_confidence_score": 100
+            }
+        ],
+        "more": true,
+        "next": 2254
+    },
+    "status": true,
+    "status_code": 206
+}
