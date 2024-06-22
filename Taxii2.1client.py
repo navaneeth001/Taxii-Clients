@@ -1,51 +1,50 @@
 from taxii2client.v21 import Server
 import json
+import sys
 
-url = input("Enter TAXII server URL: ")
-username = input("Enter username: ")
-password = input("Enter password: ")
-
+url = "https://pulsedive.com/taxii2/"
+username = "taxii2"
+password = "bbcff74cf8442edcc8d52a4b61ec9a58912e0b018bbb473c0f08136595676723"
+# reference_time="2022-11-20T15:56:04.100Z" // optional date object to filter out objects based on created date
+reference_time=None #set as none ot not appy any date filter
+server = None
 try:
     server = Server(url=url, user=username, password=password)
     print("Server initialized successfully!")
     
     col = {}
     num_collections = 0
-    for api_root in server.api_roots:
-        try:
-            # Count the number of collections
-            num_collections += len(api_root.collections)
-            
-            for collection in api_root.collections:
-                col[collection.id] = collection
 
-        except Exception as e:
-            print(f"Error occurred while fetching collections: {e}")
-            continue
-
-    print(f"Number of collections found: {num_collections}")
-
-    # Hardcoded collection ID
-    collection_id = 'da01d857-df1a-484a-b5fa-f0426b5880af'
-    collection = col.get(collection_id)
-
-    if collection:
-        limit = int(input("Enter limit: "))
-        
-        filter_by_date = input("Do you want to add a filter based on date? (yes/no): ").lower()
-        if filter_by_date == "yes":
-            day = int(input("Enter day: "))
-            month = int(input("Enter month: "))
-            year = int(input("Enter year: "))
-            added_after = f"{year:04d}-{month:02d}-{day:02d}T00:00:00.000Z"
+    for collection in server.api_roots[0].collections:
+        if collection.can_read:  
+            response = collection.get_objects(limit=1000,added_after=reference_time)
+            print(f'collection of id {collection.id} is processing')
+            if 'more' not in response:
+                print('Collection is empty')
+                count=0 #setting to zero in case of empty collection
+            else:
+                count=len(response['objects']) #incase of collections which has less than 1000 object, total number of objects is stored as count else be set as 1000
+            while response:
+                    # Check if there are more objects to fetch
+                    if 'more' not in response:
+                        # No more objects to fetch, break the loop
+                        break
+                    if response.get('more', True):
+                        print(f'number of objects fetched {count} from collection {collection.id}')
+                        print('more response objects:',json.dumps(response, indent=4))
+                        if 'next' not in response:
+                            print('Collection is empty')
+                            # No more objects to fetch, break the loop
+                            break
+                        # Make the next request using the 'next' property
+                        response = collection.get_objects(limit=1000, next=response['next'],added_after=reference_time)
+                        count=count+len(response['objects'])
+                    else:
+                        print('no more objects found',json.dumps(response, indent=4))
+                        # No more objects to fetch, break the loop
+                        break
         else:
-            added_after = None
-        
-        response = collection.get_objects(limit=limit, added_after=added_after)
-        print('Fetching data ..')
-        print(json.dumps(response, indent=4))
-    else:
-        print("Collection not found.")
-        
+            print(f'collection id {collection.id} does not have read access')                    
+
 except Exception as e:
     print("Error initializing server:", e)
